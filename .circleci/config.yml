@@ -33,6 +33,36 @@ jobs:
       # run tests!
       - run: yarn test
 
+  deploy-job:
+    docker:
+      - image: circleci/node:9.7
+    working_directory: /tmp/my-project
+    steps:
+      - checkout
+      - add_ssh_keys:  # add key from CircleCI account based on fingerprint
+          fingerprints:
+            - "5b:b8:d1:da:5f:92:fc:e4:1a:d4:90:88:ea:fa:49:41"
+      - run:
+          name: Run Setup Script
+          command: bash .circleci/setup-heroku.sh
+      - run:
+          name: Deploy Master to Heroku
+          command: |  # this command is framework-dependent and may vary
+            heroku git:remote -a $HEROKU_APP_NAME
+            git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
+            heroku run npm i
+            heroku restart
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build-job
+      - deploy-jobs:  # only deploy when master successfully builds
+          requires:
+            - build-job
+          filters:
+            branches:
+              only: master
 deployment:
   staging:
     branch: master
