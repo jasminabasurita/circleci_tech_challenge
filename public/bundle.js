@@ -19506,10 +19506,20 @@ var ButtonSwitch = function (_Component) {
     _this.handleClick = function () {
       var textVisible = !_this.state.textVisible;
       _this.setState({ textVisible: textVisible });
+      var interval = setInterval(function () {
+        var counter = _this.state.counter + 4;
+        if (counter >= 360) {
+          _this.setState({ counter: 0 });
+          clearInterval(interval);
+        } else {
+          _this.setState({ counter: counter });
+        }
+      }, 1);
     };
 
     _this.state = {
-      textVisible: false
+      textVisible: false,
+      counter: 0
     };
     return _this;
   }
@@ -19519,20 +19529,29 @@ var ButtonSwitch = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         "div",
-        null,
+        { id: "hero" },
+        _react2.default.createElement("object", {
+          type: "image/svg+xml",
+          style: { transform: "rotate(" + this.state.counter + "deg)" },
+          data: "/circleci.svg"
+        }),
         _react2.default.createElement(
-          "button",
-          { id: "toggle", onClick: this.handleClick },
-          _react2.default.createElement(
-            "h3",
-            null,
-            this.state.textVisible ? "Hide Text" : "Show Text"
-          )
-        ),
-        this.state.textVisible && _react2.default.createElement(
-          "h2",
+          "div",
           null,
-          "It's working!"
+          _react2.default.createElement(
+            "button",
+            { id: "toggle", onClick: this.handleClick },
+            _react2.default.createElement(
+              "h3",
+              null,
+              this.state.textVisible ? "Hide Text" : "Show Text"
+            )
+          ),
+          this.state.textVisible && _react2.default.createElement(
+            "h2",
+            null,
+            "\xA1Look At It Go!"
+          )
         )
       );
     }

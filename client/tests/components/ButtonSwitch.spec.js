@@ -9,7 +9,7 @@ import ButtonSwitch from "../../components/ButtonSwitch"
 describe("<ButtonSwitch />", () => {
   let wrapper
   let button
-  const text = "It's working!"
+  const text = "¡Look At It Go!"
   beforeEach("create component", () => {
     wrapper = shallow(<ButtonSwitch />)
     button = wrapper.find("#toggle")
